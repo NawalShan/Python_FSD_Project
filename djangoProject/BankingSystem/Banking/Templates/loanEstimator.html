@@ -2,65 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Loan Amount Estimator</title>
+    <title>Loan Amount Estimator | SmartBanking</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
-        body { background: #f4f7fb; }
-        .card { border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .result-box { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; border-radius: 8px; }
-        .error-box { background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; border-radius: 8px; }
+        body {
+            background: #f5f7fb;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 60px auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 35px 40px;
+            background: #fff;
+        }
+
+        h2 {
+            color: #2b4eff;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            border-radius: 10px !important;
+            padding: 10px !important;
+            border: 1.5px solid #ccd2f1 !important;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #2b4eff !important;
+            box-shadow: 0 0 6px rgba(43, 78, 255, 0.2) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2b4eff, #364fc7);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(43, 78, 255, 0.3);
+        }
+
+        .error-box {
+            background: #ffe9e9;
+            border-left: 5px solid #d00000;
+            color: #d00000;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            color: #364fc7;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Popup Modal Styling */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            text-align: center;
+            padding: 20px 30px;
+        }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-body h4 {
+            color: #28a745;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .predicted-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            margin-top: 40px;
+            font-size: 14px;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container mt-5">
-    <div class="mb-4">
-        <a href="{% url 'banking:dashboard' %}" class="btn btn-secondary btn-sm">← Back to Dashboard</a>
-    </div>
+<div class="container">
+    <a href="{% url 'banking:dashboard' %}" class="back-btn">← Back to Dashboard</a>
 
-    <h2 class="mb-4">Loan Eligibility Estimator</h2>
+    <h2>Loan Amount Estimator</h2>
 
-    <div class="card p-4">
-        <form method="POST">
+    <div class="card">
+        <form method="POST" id="loanForm">
             {% csrf_token %}
             
             <div class="mb-3">
-                <label for="{{ form.age.id_for_label }}" class="form-label">Age</label>
+                <label>Age</label>
                 {{ form.age }}
                 {{ form.age.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.monthly_income.id_for_label }}" class="form-label">Monthly Income (₹)</label>
+                <label>Monthly Income (₹)</label>
                 {{ form.income }}
                 {{ form.income.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.credit_score.id_for_label }}" class="form-label">Credit Score</label>
+                <label>Credit Score</label>
                 {{ form.credit_score }}
-                 {{ form.credit_score.errors }}
+                {{ form.credit_score.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.loan_tenure_years.id_for_label }}" class="form-label">Loan Tenure (years)</label>
+                <label>Loan Tenure (Years)</label>
                 {{ form.tenure }}
                 {{ form.tenure.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.existing_loan_amount.id_for_label }}" class="form-label">Existing Loan (₹)</label>
+                <label>Existing Loan (₹)</label>
                 {{ form.existing_loan }}
                 {{ form.existing_loan.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.num_of_dependents.id_for_label }}" class="form-label">Number of Dependents</label>
+                <label>Number of Dependents</label>
                 {{ form.dependents }}
                 {{ form.dependents.errors }}
             </div>
 
-            <button class="btn btn-primary w-100" type="submit">Predict Loan Amount</button>
+            <button type="submit" class="btn btn-primary w-100 mt-3">Predict Loan Amount</button>
         </form>
 
         {% if error %}
@@ -68,19 +177,40 @@
                 <strong>❌ Error:</strong> {{ error }}
             </div>
         {% endif %}
-
-        {% if predicted_amount %}
-            <div class="result-box mt-4">
-                <h5>✅ Prediction Result</h5>
-                <p class="mb-0">
-                    <strong>Eligible Loan Amount:</strong> 
-                    <span style="font-size: 1.8rem; color: #28a745;">₹{{ predicted_amount }}</span>
-                </p>
-            </div>
-        {% endif %}
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Popup Modal for Result -->
+<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+            <div class="modal-header justify-content-center">
+                <h4 class="modal-title">🎯 Prediction Result</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Eligible Loan Amount</h4>
+                <p class="predicted-value">₹{{ predicted_amount }}</p>
+                <p class="text-muted mb-0">({{ model_source }})</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © {{ now|date:"Y" }} SmartBanking — Predict your future loans confidently 💙
+</footer>
+
+{% if predicted_amount %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = new bootstrap.Modal(document.getElementById("resultModal"));
+        modal.show();
+    });
+</script>
+{% endif %}
+
 </body>
 </html>
