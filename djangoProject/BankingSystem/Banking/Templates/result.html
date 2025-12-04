@@ -1,0 +1,11 @@
+{% extends "loanEstimator.html" %}
+{% block content %}
+  <h2>Estimated Loan Amount</h2>
+  {% if predicted %}
+    <p>Eligible Loan Amount: ₹{{ predicted|floatformat:0 }}</p>
+  {% else %}
+    <p>Model is not available. Please contact admin.</p>
+  {% endif %}
+  <p>Saved request ID: {{ request_obj.id }}</p>
+  <a href="{% url 'banking:loan_estimator' %}">Estimate again</a>
+{% endblock %}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ tool|title }} Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px 35px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2b4eff;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2b4eff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        button:hover {
+            background: #1e38c7;
+        }
+
+        .error {
+            color: #d00000;
+            background: #ffe5e5;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #e8f0ff;
+            border-left: 5px solid #2b4eff;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>{{ tool|title }} Calculator</h2>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% if tool == "emi" %}
+            <label>Loan Amount:</label>
+            <input type="number" name="principal" step="0.01" required>
+
+            <label>Annual Interest Rate (%):</label>
+            <input type="number" name="annual_rate" step="0.01" required>
+
+            <label>Tenure (Years):</label>
+            <input type="number" name="tenure" step="0.1" required>
+
+        {% elif tool == "sip" %}
+            <label>Monthly Investment:</label>
+            <input type="number" name="monthly" step="0.01" required>
+
+            <label>Annual Return Rate (%):</label>
+            <input type="number" name="annual_rate" step="0.01" required>
+
+            <label>Years:</label>
+            <input type="number" name="years" step="0.1" required>
+
+        {% elif tool == "fd" %}
+            <label>Principal Amount:</label>
+            <input type="number" name="principal" step="0.01" required>
+
+            <label>Annual Rate (%):</label>
+            <input type="number" name="annual_rate" step="0.01" required>
+
+            <label>Years:</label>
+            <input type="number" name="years" step="0.1" required>
+
+            <label>Compounding Frequency:</label>
+            <input type="number" name="freq" value="1">
+
+        {% elif tool == "rd" %}
+            <label>Monthly Deposit:</label>
+            <input type="number" name="monthly" step="0.01" required>
+
+            <label>Annual Rate (%):</label>
+            <input type="number" name="annual_rate" step="0.01" required>
+
+            <label>Years:</label>
+            <input type="number" name="years" step="0.1" required>
+
+        {% elif tool == "retire" %}
+            <label>Current Savings:</label>
+            <input type="number" name="savings" step="0.01" required>
+
+            <label>Monthly Contribution:</label>
+            <input type="number" name="monthly_add" step="0.01" required>
+
+            <label>Annual Growth Rate (%):</label>
+            <input type="number" name="annual_return" step="0.01" required>
+
+            <label>Years:</label>
+            <input type="number" name="years" step="0.1" required>
+
+        {% elif tool == "home" %}
+            <label>Monthly Income:</label>
+            <input type="number" name="income" step="0.01" required>
+
+            <label>Monthly Expenses:</label>
+            <input type="number" name="expenses" step="0.01" required>
+
+            <label>Annual Interest Rate (%):</label>
+            <input type="number" name="annual_rate" step="0.01" required>
+
+            <label>Tenure (Years):</label>
+            <input type="number" name="tenure" step="0.1" required>
+
+        {% elif tool == "cc" %}
+            <label>Current Balance:</label>
+            <input type="number" name="balance" step="0.01" required>
+
+            <label>Monthly Interest (%):</label>
+            <input type="number" name="monthly_interest" step="0.01" required>
+
+            <label>Minimum Payment (%):</label>
+            <input type="number" name="minimum_percent" step="0.01" required>
+
+            <label>Months:</label>
+            <input type="number" name="months" required>
+
+        {% elif tool == "tax" %}
+            <label>Gross Income:</label>
+            <input type="number" name="gross" step="0.01" required>
+
+            <label>Standard Deduction:</label>
+            <input type="number" name="standard" value="50000" step="0.01">
+
+            <label>Other Deductions:</label>
+            <input type="number" name="other" step="0.01">
+
+        {% elif tool == "budget" %}
+            <label>Total Income:</label>
+            <input type="number" name="income" step="0.01" required>
+
+            <label>Total Expenses:</label>
+            <input type="number" name="expenses" step="0.01" required>
+
+        {% elif tool == "networth" %}
+            <label>Assets (comma-separated):</label>
+            <input type="text" name="assets" placeholder="10000, 20000, 50000">
+
+            <label>Liabilities (comma-separated):</label>
+            <input type="text" name="liabilities" placeholder="5000, 10000">
+
+        {% endif %}
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result %}
+        <div class="result-box">
+            <h3>Result</h3>
+            <p>{{ result }}</p>
+        </div>
+    {% endif %}
+
+    <a class="back-link" href="{% url 'banking:dashboard' %}">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>
