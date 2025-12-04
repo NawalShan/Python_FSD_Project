@@ -12,6 +12,6 @@ urlpatterns = [
     path("deposit/", views.deposit_view, name="deposit"),
     path("withdraw/", views.withdraw_view, name="withdraw"),
     path("calculator/<str:tool>/", views.calculator_view, name="calculator"),
-    path("loan-estimator/", views.predict_view, name="loan_estimator"),
+    path("loan-estimator/", views.loan_estimator, name="loan_estimator"),
 
 ]

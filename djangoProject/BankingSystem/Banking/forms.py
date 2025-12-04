@@ -70,10 +70,10 @@ class CalculatorForm(forms.Form):
     assets = forms.CharField(required=False)
     liabilities = forms.CharField(required=False)
 
-class LoanForm(forms.Form):
-    age = forms.IntegerField(min_value=18, max_value=100, initial=32)
-    monthly_income = forms.FloatField(min_value=0, initial=85000)
-    credit_score = forms.IntegerField(min_value=300, max_value=850, initial=720)
-    loan_tenure_years = forms.IntegerField(min_value=1, max_value=30, initial=10)
-    existing_loan_amount = forms.FloatField(min_value=0, initial=100000)
-    num_of_dependents = forms.IntegerField(min_value=0, max_value=10, initial=2)
+class LoanEstimatorForm(forms.Form):
+    age = forms.IntegerField(min_value=18, max_value=100, label="Age")
+    income = forms.FloatField(min_value=0.0, label="Monthly Income (₹)")
+    credit_score = forms.IntegerField(min_value=300, max_value=900, label="Credit Score")
+    tenure = forms.IntegerField(min_value=1, max_value=40, label="Loan Tenure (years)")
+    existing_loan = forms.FloatField(required=False, min_value=0.0, initial=0.0, label="Existing Loan (₹)")
+    dependents = forms.IntegerField(required=False, min_value=0, initial=0, label="Dependents")

@@ -28,17 +28,3 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - ₹{self.balance}"
-
-class LoanRequest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    age = models.PositiveIntegerField()
-    monthly_income = models.FloatField()
-    credit_score = models.PositiveIntegerField()
-    loan_tenure_years = models.PositiveIntegerField()
-    existing_loan_amount = models.FloatField(default=0.0)
-    num_of_dependents = models.PositiveIntegerField(default=0)
-    predicted_amount = models.FloatField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"LoanRequest(id={self.id}, predicted=₹{self.predicted_amount})"

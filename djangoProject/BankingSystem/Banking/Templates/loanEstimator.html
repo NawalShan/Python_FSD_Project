@@ -18,7 +18,7 @@
         <a href="{% url 'banking:dashboard' %}" class="btn btn-secondary btn-sm">← Back to Dashboard</a>
     </div>
 
-    <h2 class="mb-4">Loan Eligibility Estimator (ML)</h2>
+    <h2 class="mb-4">Loan Eligibility Estimator</h2>
 
     <div class="card p-4">
         <form method="POST">
@@ -27,31 +27,37 @@
             <div class="mb-3">
                 <label for="{{ form.age.id_for_label }}" class="form-label">Age</label>
                 {{ form.age }}
+                {{ form.age.errors }}
             </div>
 
             <div class="mb-3">
                 <label for="{{ form.monthly_income.id_for_label }}" class="form-label">Monthly Income (₹)</label>
-                {{ form.monthly_income }}
+                {{ form.income }}
+                {{ form.income.errors }}
             </div>
 
             <div class="mb-3">
                 <label for="{{ form.credit_score.id_for_label }}" class="form-label">Credit Score</label>
                 {{ form.credit_score }}
+                 {{ form.credit_score.errors }}
             </div>
 
             <div class="mb-3">
                 <label for="{{ form.loan_tenure_years.id_for_label }}" class="form-label">Loan Tenure (years)</label>
-                {{ form.loan_tenure_years }}
+                {{ form.tenure }}
+                {{ form.tenure.errors }}
             </div>
 
             <div class="mb-3">
                 <label for="{{ form.existing_loan_amount.id_for_label }}" class="form-label">Existing Loan (₹)</label>
-                {{ form.existing_loan_amount }}
+                {{ form.existing_loan }}
+                {{ form.existing_loan.errors }}
             </div>
 
             <div class="mb-3">
                 <label for="{{ form.num_of_dependents.id_for_label }}" class="form-label">Number of Dependents</label>
-                {{ form.num_of_dependents }}
+                {{ form.dependents }}
+                {{ form.dependents.errors }}
             </div>
 
             <button class="btn btn-primary w-100" type="submit">Predict Loan Amount</button>
@@ -63,12 +69,12 @@
             </div>
         {% endif %}
 
-        {% if predicted %}
+        {% if predicted_amount %}
             <div class="result-box mt-4">
                 <h5>✅ Prediction Result</h5>
                 <p class="mb-0">
                     <strong>Eligible Loan Amount:</strong> 
-                    <span style="font-size: 1.8rem; color: #28a745;">₹{{ predicted }}</span>
+                    <span style="font-size: 1.8rem; color: #28a745;">₹{{ predicted_amount }}</span>
                 </p>
             </div>
         {% endif %}
